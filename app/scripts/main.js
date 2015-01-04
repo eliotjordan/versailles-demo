@@ -40,15 +40,20 @@
     });
   }
 
-  var geoJsonLayer = L.geoJson(sectionA, {
-    style: function(feature) {
-      return feature.properties && feature.properties.style;
-    },
-    onEachFeature: onEachFeature
-  });
+  var geoJsonLayer = L.geoJson(
+    [sectionA, sectionB, sectionC, sectionD, sectionE, sectionF, sectionG,
+      sectionH, sectionI, sectionJ, sectionK, sectionL, sectionM, sectionN
+    ], {
+      style: function(feature) {
+        return feature.properties && feature.properties.style;
+      },
+
+      onEachFeature: onEachFeature
+    });
 
   var markers = L.markerClusterGroup({
-    spiderfyDistanceMultiplier: 3
+    spiderfyDistanceMultiplier: 3,
+    showCoverageOnHover: false
   });
   markers.addLayer(geoJsonLayer);
 
