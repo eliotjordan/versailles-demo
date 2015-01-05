@@ -23,18 +23,22 @@
   function onEachFeature(feature, layer) {
     var imageUrl = feature.properties.iiif,
       thumbnailUrl = '',
+      rotation = feature.properties.rotation || 0,
+      title = feature.properties.title || '',
       itemUrl = BASE_ITEM_URL + feature.id;
 
     if (imageUrl) {
 
       // Strip 'info.json' from iiif url and add thumbnail params
       thumbnailUrl = imageUrl.replace(new RegExp('(.*/)[^/]+$'), '$1') +
-        'full/' + THUMBNAIL_SIZE + ',' + '/0/native.jpg';
+        'full/' + THUMBNAIL_SIZE + ',' + '/' + rotation + '/native.jpg';
     }
 
-    var popupContent = '<a href=' + itemUrl + '>' +
+    var popupContent = '<div style="width:' + THUMBNAIL_SIZE + 'px;"">' +
+      '<h3 class="popup-title">' + title + '</h3>' +
+      '<a href=' + itemUrl + '>' +
       '<img src=' + thumbnailUrl + '>' +
-      '</a>';
+      '</a>' + '</div>';
     layer.bindPopup(popupContent, {
       minWidth: THUMBNAIL_SIZE
     });
