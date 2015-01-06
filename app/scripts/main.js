@@ -25,13 +25,23 @@
       thumbnailUrl = '',
       rotation = feature.properties.rotation || 0,
       title = feature.properties.title || '',
-      itemUrl = BASE_ITEM_URL + feature.id;
+      itemUrl = BASE_ITEM_URL + feature.id,
+      thumbnailParams = '';
+
+    // if image needs rotation, swap width and height in image request
+    if (rotation !== 0) {
+      thumbnailParams = 'full/' + ',' + THUMBNAIL_SIZE +
+        '/' + rotation + '/native.jpg';
+    } else {
+      thumbnailParams = 'full/' + THUMBNAIL_SIZE +',' +
+        '/' + rotation + '/native.jpg';
+    }
 
     if (imageUrl) {
 
-      // Strip 'info.json' from iiif url and add thumbnail params
+      // strip 'info.json' from iiif url and add thumbnail params
       thumbnailUrl = imageUrl.replace(new RegExp('(.*/)[^/]+$'), '$1') +
-        'full/' + THUMBNAIL_SIZE + ',' + '/' + rotation + '/native.jpg';
+        thumbnailParams;
     }
 
     var popupContent = '<div style="width:' + THUMBNAIL_SIZE + 'px;"">' +
