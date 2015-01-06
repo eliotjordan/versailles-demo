@@ -6,7 +6,7 @@
   L.Icon.Default.imagePath = 'images/';
 
   var BASE_ITEM_URL = 'http://libphp-dev.princeton.edu/versailles/item/',
-    BASE_LAYER = 'http://libimages.princeton.edu/loris2/' +
+    BASE_MAP = 'http://libimages.princeton.edu/loris2/' +
       'exhibits%2FVersailles%2Fversailles_13%2FImage00120_vert.jp2/info.json',
     THUMBNAIL_SIZE = 250;
 
@@ -17,8 +17,8 @@
     zoom: 0
   });
 
-  // add Versaille iiif tile layer
-  var tileLayer = L.tileLayer.iiif(BASE_LAYER, {}).addTo(map);
+  // add Versailles iiif tile layer
+  var tileLayer = L.tileLayer.iiif(BASE_MAP, {}).addTo(map);
 
   function onEachFeature(feature, layer) {
     var imageUrl = feature.properties.iiif,
@@ -44,10 +44,7 @@
     });
   }
 
-  var geoJsonLayer = L.geoJson(
-    [sectionA, sectionB, sectionC, sectionD, sectionE, sectionF, sectionG,
-      sectionH, sectionI, sectionJ, sectionK, sectionL, sectionM, sectionN
-    ], {
+  var geoJsonLayer = L.geoJson(itemData, {
       style: function(feature) {
         return feature.properties && feature.properties.style;
       },
