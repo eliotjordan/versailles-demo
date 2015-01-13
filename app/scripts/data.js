@@ -1,4 +1,4 @@
-itemData = {
+var itemData = {
   "type": "FeatureCollection",
   "features": [
     {
