@@ -8,7 +8,9 @@
   var BASE_ITEM_URL = 'http://libphp-dev.princeton.edu/versailles/item/',
     BASE_MAP = 'http://libimages.princeton.edu/loris2/' +
       'exhibits%2FVersailles%2Fversailles_13%2FImage00120_vert.jp2/info.json',
-    THUMBNAIL_SIZE = 250;
+    THUMBNAIL_SIZE = 250,
+    GEOJSON_URL =  'http://github-raw-cors-proxy.herokuapp.com/' +
+      'eliotjordan/versailles-demo/gh-pages/app/scripts/map.json';
 
   // create leaflet-iiif map
   var map = L.map('map', {
@@ -20,6 +22,20 @@
   // add Versailles iiif tile layer
   var tileLayer = L.tileLayer.iiif(BASE_MAP, {}).addTo(map);
 
+  // load geojson from server  https://gist.github.com/mazell/8843945
+  function loadJSON(jsonUrl,callback) {   
+      var xobj = new XMLHttpRequest();
+          xobj.overrideMimeType("application/json");
+    xobj.open('GET', jsonUrl, true);
+    xobj.onreadystatechange = function () {
+            if (xobj.readyState == 4 && xobj.status == "200") {
+              callback(xobj.responseText);
+            }
+      };
+      xobj.send(null);  
+   }
+
+   // parse features in geosjon
   function onEachFeature(feature, layer) {
     var imageUrl = feature.properties.field_image_id,
       thumbnailUrl = '',
@@ -28,8 +44,9 @@
       itemUrl = BASE_ITEM_URL + feature.properties.nid,
       thumbnailParams = '';
 
-    // if image needs rotation, swap width and height in image request
+    // generate thumbnail params
     if (rotation !== 0) {
+      // if image needs rotation, swap width and height in image request
       thumbnailParams = 'full/' + ',' + THUMBNAIL_SIZE +
         '/' + rotation + '/native.jpg';
     } else {
@@ -37,6 +54,7 @@
         '/' + rotation + '/native.jpg';
     }
 
+    // generate thumbnail url
     if (imageUrl) {
 
       // strip 'info.json' from iiif url and add thumbnail params
@@ -44,6 +62,7 @@
         thumbnailParams;
     }
 
+    // format popup
     var popupContent = '<div style="width:' + THUMBNAIL_SIZE + 'px;"">' +
       '<h3 class="popup-title">' + title + '</h3>' +
       '<a href=' + itemUrl + '>' +
@@ -54,23 +73,34 @@
     });
   }
 
-  var geoJsonLayer = L.geoJson(itemData, {
-      style: function(feature) {
-        return feature.properties && feature.properties.style;
-      },
-
-      onEachFeature: onEachFeature
-    });
-
-  var markers = L.markerClusterGroup({
-    spiderfyDistanceMultiplier: 3,
-    showCoverageOnHover: false
-  });
-  markers.addLayer(geoJsonLayer);
-
   // add markers to map after all tiles loaded
   function onTilesLoaded() {
-    map.addLayer(markers);
+
+    // load geojson from server
+    loadJSON(GEOJSON_URL, function(response) {
+
+      // when ready, parse into JSON object
+      var itemJSON = JSON.parse(response);
+
+      // create geojson layer 
+      var geoJsonLayer = L.geoJson(itemJSON, {
+        style: function(feature) {
+          return feature.properties && feature.properties.style;
+        },
+
+        onEachFeature: onEachFeature
+      });
+
+      // create marker cluster with non-default params
+      var markers = L.markerClusterGroup({
+        spiderfyDistanceMultiplier: 3,
+        showCoverageOnHover: false
+      });
+
+      // add geojson layer to map
+      markers.addLayer(geoJsonLayer);
+      map.addLayer(markers);
+    });
   }
   tileLayer.on('load', onTilesLoaded);
 }(window, document, L));
