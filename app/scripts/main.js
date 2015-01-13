@@ -21,11 +21,11 @@
   var tileLayer = L.tileLayer.iiif(BASE_MAP, {}).addTo(map);
 
   function onEachFeature(feature, layer) {
-    var imageUrl = feature.properties.iiif,
+    var imageUrl = feature.properties.field_image_id,
       thumbnailUrl = '',
       rotation = feature.properties.rotation || 0,
-      title = feature.properties.title || '',
-      itemUrl = BASE_ITEM_URL + feature.id,
+      title = feature.properties.name || '',
+      itemUrl = BASE_ITEM_URL + feature.properties.nid,
       thumbnailParams = '';
 
     // if image needs rotation, swap width and height in image request
