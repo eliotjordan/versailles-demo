@@ -39,7 +39,7 @@
   function onEachFeature(feature, layer) {
     var imageUrl = feature.properties.field_image_id,
       thumbnailUrl = '',
-      rotation = feature.properties.rotation || 0,
+      rotation = feature.properties.rotation.trim() || 0,
       title = feature.properties.name || '',
       itemUrl = BASE_ITEM_URL + feature.properties.nid,
       thumbnailParams = '';
