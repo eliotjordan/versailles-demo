@@ -64,8 +64,8 @@
 
     // format popup
     var popupContent = '<div style="width:' + THUMBNAIL_SIZE + 'px;"">' +
-      '<h3 class="popup-title">' + title + '</h3>' +
-      '<a href=' + itemUrl + '>' +
+      '<a class="popup" href=' + itemUrl + '>' +
+      '<h3 class="popup-text">' + title + '</h3>' +
       '<img src=' + thumbnailUrl + '>' +
       '</a>' + '</div>';
     layer.bindPopup(popupContent, {

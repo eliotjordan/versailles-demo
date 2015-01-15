@@ -43,9 +43,14 @@ header .appName {
 	background: #FFF;
 }
 
-.popup-title {
+.popup-text {
 	font-family: "Fanwood Text", Georgia, Times, serif;
 	font-weight: normal;
 	font-variant: small-caps;
 	letter-spacing: .02em;
+	color: black;
+}
+
+a.popup:link {
+	text-decoration: none;
 }
