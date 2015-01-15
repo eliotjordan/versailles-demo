@@ -5,7 +5,7 @@
 
   L.Icon.Default.imagePath = 'images/';
 
-  var BASE_ITEM_URL = 'http://libphp-dev.princeton.edu/versailles/item/',
+  var BASE_ITEM_URL = 'http://libphp-prod.princeton.edu/versailles/item/',
     BASE_MAP = 'http://libimages.princeton.edu/loris2/' +
       'exhibits%2FVersailles%2Fversailles_13%2FImage00120_vert.jp2/info.json',
     THUMBNAIL_SIZE = 250,
